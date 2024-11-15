@@ -48,7 +48,10 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     animation: containerFloat 8s ease-in-out infinite;
     perspective: 1000px;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, height;
+    height: auto;
+    min-height: 400px; /* Add minimum height to prevent collapse */
     transform-origin: center center;
 }
 
@@ -119,7 +122,12 @@ body {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(4px);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, height, opacity;
+    min-height: 120px; /* Increased minimum height */
+    height: auto;
+    position: relative;
+    overflow: hidden;
     font-family: 'Comic Neue', cursive;
     animation: float-inverse 3s ease-in-out infinite;
 }
@@ -171,8 +179,12 @@ body {
     line-height: 1.6;
     margin-bottom: 1rem;
     opacity: 1;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, opacity;
+    display: block;
+    padding: 0.5rem;
     font-weight: 700;
+    transform-origin: center;
 }
 
 button {
@@ -189,6 +201,22 @@ button {
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     font-family: 'Comic Neue', cursive;
     font-weight: 700;
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent !important; /* Force transparent background */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white !important; /* Force white text */
+    outline: none;
+    /* Remove any default mobile styles */
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus {
+    outline: none;
+    background: transparent !important;
+    color: white !important;
 }
 
 button.click-animate {
@@ -203,14 +231,23 @@ button:hover {
 
 @keyframes containerPulseOnClick {
     0% { transform: scale(1) translateZ(0); }
-    50% { transform: scale(0.98) translateZ(-10px); }
+    50% { transform: scale(0.995) translateZ(-5px); }
     100% { transform: scale(1) translateZ(0); }
 }
 
 @keyframes jokeContainerPulse {
-    0% { transform: translateZ(20px) scale(1); opacity: 1; }
-    50% { transform: translateZ(10px) scale(0.98); opacity: 0.8; }
-    100% { transform: translateZ(20px) scale(1); opacity: 1; }
+    0% { 
+        transform: translateZ(20px) scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: translateZ(15px) scale(0.995);
+        opacity: 0.98;
+    }
+    100% { 
+        transform: translateZ(20px) scale(1);
+        opacity: 1;
+    }
 }
 
 @keyframes buttonPulse {
@@ -427,11 +464,14 @@ button:hover {
     button {
         padding: 1rem 2rem;
         font-size: 1.2rem;
+        -webkit-appearance: none;
+        background: transparent !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .joke-container {
-        padding: 1.5rem;
-        margin: 1.5rem 0;
+    button:active {
+        background: rgba(255, 255, 255, 0.1) !important;
     }
 }
 
