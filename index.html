@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon...</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="pattern-container">
+        <div class="pattern pattern-grid" id="emojiPattern"></div>
+    </div>
+    <div class="emoji-background">
+        <span class="floating-emoji">🌟</span>
+        <span class="floating-emoji">✨</span>
+        <span class="floating-emoji">💫</span>
+        <span class="floating-emoji">⚡</span>
+        <span class="floating-emoji">🚀</span>
+        <span class="floating-emoji">💡</span>
+        <span class="floating-emoji">🎯</span>
+        <span class="floating-emoji">🌈</span>
+    </div>
+    <div class="container glass">
+        <h1 class="bounce-text">
+            🐣 Our Minions <br> Are Still Working On It! 🛠️
+            <span class="subtitle">They're Moving Pixels & Breaking Things...</span>
+        </h1>
+        <div class="pattern-name-display">Current Pattern: <span id="patternName">grid</span></div>
+        <div class="joke-container glass">
+            <p class="joke-text" id="joke">Loading giggles and bits... 🤪</p>
+        </div>
+        <button onclick="window.getRandomJoke()">Hit me with another one! 🎯</button>
+    </div>
+
+    <script>
+        
+        const jokes = [
+            "Why don't scientists trust atoms? Because they make up everything!",
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "Why was the math book sad? Because it had too many problems.",
+            "Why don't programmers like nature? It has too many bugs.",
+            "Why do we tell actors to 'break a leg?' Because every play has a cast.",
+            "How many tickles does it take to make an octopus laugh? Ten-tickles!",
+            "Why did the coffee file a police report? It got mugged!",
+            "Why did the computer go to the doctor? Because it had a virus!",
+            "Why was the cell phone wearing glasses? It lost its contacts.",
+            "Why don't skeletons fight each other? They don't have the guts.",
+            "Why couldn't the bicycle stand up by itself? It was two-tired!",
+            "What did one wall say to the other wall? I'll meet you at the corner!",
+            "Why did the cookie go to the doctor? Because he felt crummy.",
+            "What do you call cheese that isn't yours? Nacho cheese!",
+            "Why did the tomato turn red? Because it saw the salad dressing!",
+            "Why was the computer cold? It left its Windows open!",
+            "What do you get if you cross a cat with a dark horse? Kitty Perry.",
+            "Why did the math teacher take off points? Because the student's work was derivative.",
+            "Why did the physicist break up with the biologist? There was no chemistry.",
+            "What’s a statistician’s favorite dance? The random walk.",
+            "Why did the graduate student drown? He was below average.",
+            "Why was the lecture on null hypotheses so boring? Because it had no effect.",
+            "Why did the professor bring a ladder to class? To reach new heights in teaching.",
+            "Why don’t geologists get into arguments? They just let things slide.",
+            "Why was the library so quiet? Everyone was fully booked.",
+            "Why did the calculus professor go to therapy? He had too many limits to handle.",
+            "Why don’t quantum physicists ever argue? They just let things superposition.",
+            "Why did the English professor get angry at the thesaurus? Because it was being so repetitive, redundant, and verbose!",
+            "Why did the biologist go to the art gallery? To see the cell-ebrations.",
+            "Why did the history student bring a ladder to the exam? To climb the timeline.",
+            "Why did the student take a nap during the statistics class? He wanted to work on his standard deviation from consciousness.",
+            "What’s a mathematician’s favorite pick-up line? Are you an integral? Because you make me whole.",
+            "Why don’t chemists ever argue? They have good reactions.",
+            "Why do astronomers never get married? They need their space.",
+            "Why was the student scared of their final exam? It was multiple choice, but they felt like they had no options.",
+            "Why was the research paper rejected? It didn’t have enough ‘substance’ for the journal.",
+            "What do you call a fake noodle? An impasta—great for a linguistics pun too!",
+            "Why did the particle accelerator break up with the atom? It couldn't handle the spin!",
+            "Why do mathematicians hate U.S. highways? Too many divergent series.",
+            "Why did the algebra book look sad? Because of all the problems it couldn’t solve!",
+            "What’s an astronaut’s favorite part of a computer? The space bar.",
+            "Why don’t some couples go to the gym? Because some relationships don't work out!",
+            "Why do biologists look forward to casual Fridays? They're less gene-strict.",
+            "How do you organize a space party? You planet.",
+            "Why don’t ants get sick? Because they have little ant-bodies.",
+            "What do you call an academically successful slice of bread? An honor roll."
+        ];
+
+        const emojis = [
+            // Yellow Faces
+            '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '😊',
+            '😇', '🥰', '😍', '🤩', '😘', '😋', '🤪', '😜', '😝', '🤗',
+            '🤓', '😎', '🥳', '🤡', '🤠', '🥸', '😺', '😸', '😹', '😻',
+            // Original Emojis
+            '✨', '🌟', '💫', '⭐', '🌈', '🎯', '🎉', '🎊', '🎈', '🎀',
+            '🌺', '🌸', '🌼', '🌻', '🌹', '🌷', '🪷', '🍀', '🦋', '🐝',
+            '🌞', '🌙', '⚡', '🔮', '🌠', '🪄', '🎭', '🎪',
+            '💝', '💖', '💗', '💓', '💕', '💘', '💞', '💫',
+            '🎨', '🎵', '🎸', '🎮', '🎲', '🎯', '🎪', '🎡',
+            '🚀', '💡', '⚡', '💫', '🔥', '✨', '💎', '🌟'
+        ];
+
+        // Update patterns array to normalize case
+        const patterns = [
+            'heart',
+            'diagonal',
+            'checkerboard',
+            'wave',
+            'spiral',
+            'grid',
+            'zigzag',
+            'diamond'
+        ];
+
+        function createDiagonalPattern(container) {
+            const size = 12;  // Increased from 10
+            const spacing = 3; // Controls density
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if ((i + j) % spacing === 0) {
+                        const emoji = document.createElement('div');
+                        emoji.className = 'emoji';
+                        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        emoji.style.gridColumn = `${j + 1}`;
+                        emoji.style.gridRow = `${i + 1}`;
+                        emoji.style.transform = `rotate(${45}deg)`;
+                        emoji.style.opacity = 0;
+                        container.appendChild(emoji);
+                        // Stagger animation
+                        setTimeout(() => emoji.style.opacity = '0.6', j * 50 + i * 50);
+                    }
+                }
+            }
+        }
+
+        function createCheckerboard(container) {
+            const size = 8;
+            
+            container.style.display = 'grid';
+            container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+            
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if ((i + j) % 2 === 0) {
+                        const emoji = document.createElement('div');
+                        emoji.className = 'emoji';
+                        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        emoji.style.gridColumn = `${j + 1}`;
+                        emoji.style.gridRow = `${i + 1}`;
+                        emoji.style.opacity = 0;
+                        container.appendChild(emoji);
+                        setTimeout(() => emoji.style.opacity = '0.6', (i + j) * 50);
+                    }
+                }
+            }
+        }
+
+        // Update createPatternElements pattern name display
+        function createPatternElements(pattern) {
+            const container = document.getElementById('emojiPattern');
+            const patternNameDisplay = document.getElementById('patternName');
+            
+            // Normalize pattern name display
+            const displayName = pattern.charAt(0).toUpperCase() + pattern.slice(1).toLowerCase();
+            patternNameDisplay.textContent = displayName;
+            
+            // Fade out current pattern
+            container.style.opacity = '0';
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+                container.className = `pattern pattern-${pattern}`;
+                
+                // Reset any previous transformations
+                container.style.transform = 'none';
+                
+                // Reset container styles
+                container.style.display = 'grid';
+                container.style.gridTemplateColumns = '';
+                container.style.gridTemplateRows = '';
+                
+                try {
+                    switch(pattern) {
+                        case 'wave': 
+                            createWavePattern(container); 
+                            break;
+                        case 'spiral': 
+                            createSpiralPattern(container); 
+                            break;
+                        case 'heart': 
+                            createHeartPattern(container); 
+                            break;
+                        case 'diamond': 
+                            createDiamondPattern(container); 
+                            break;
+                        case 'zigzag': 
+                            createZigzagPattern(container); 
+                            break;
+                        case 'grid':
+                            createGridPattern(container);
+                            break;
+                        case 'diagonal':
+                            createDiagonalPattern(container);
+                            break;
+                        case 'checkerboard':
+                            createCheckerboard(container);
+                            break;
+                        default:
+                            createGridPattern(container); // Fallback pattern
+                    }
+                    
+                    // Ensure pattern is visible
+                    requestAnimationFrame(() => {
+                        container.style.opacity = '1';
+                    });
+                } catch (error) {
+                    console.error(`Error creating pattern ${pattern}:`, error);
+                    // Fallback to grid pattern if there's an error
+                    createGridPattern(container);
+                    container.style.opacity = '1';
+                }
+            }, 500);
+        }
+
+        function createGridPattern(container) {
+            const rows = 6;
+            const cols = 8;
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.gridColumn = `${j + 1}`;
+                    emoji.style.gridRow = `${i + 1}`;
+                    emoji.style.opacity = 0;
+                    container.appendChild(emoji);
+                    setTimeout(() => emoji.style.opacity = '0.6', (i + j) * 50);
+                }
+            }
+        }
+        
+        const emojiGroups = {
+            nature: ['🌸', '🌺', '🌼', '🌻', '🍀', '🌿', '🍃', '🌱', '🍂', '🌹', '🌷', '💐'],
+            water: ['🌊', '💧', '🌪️', '💫', '🌀', '✨', '💦', '🫧', '🌈'],
+            ocean: ['🐋', '🐬', '🐟', '🐠', '🦈', '🦀', '🐚', '🐙', '🦑'],
+            space: ['⭐', '🌟', '💫', '✨', '🌠', '🌙', '☄️', '🚀', '🌎'],
+            hearts: ['❤️', '💖', '💗', '💓', '💕', '💝', '💟', '💌', '💘'],
+            fire: ['🔥', '💥', '⚡', '✨', '🌟', '💫', '🎇', '🎆', '☄️'],
+            party: ['🎈', '🎉', '🎊', '🎪', '🎨', '🎭', '🎪', '🎡', '🎢'],
+            faces: ['😊', '🥰', '😍', '🤩', '😎', '🥳', '😇', '🤗', '😄']
+        };
+
+        function createWavePattern(container) {
+            container.style = '';
+            container.style.position = 'relative';
+            container.style.width = '100%';
+            container.style.height = '100vh';
+
+            const waterEmojis = emojiGroups.water;
+            const oceanEmojis = emojiGroups.ocean;
+            
+            const rows = 10;
+            const cols = 12;
+            const baseAmplitude = 40;
+            const baseFrequency = 0.2;
+            let time = 0;
+            
+            for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                
+                const emojiSet = i < rows/2 ? waterEmojis : oceanEmojis;
+                emoji.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+                
+                const x = (j / cols) * 100;
+                const y = (i / rows) * 100;
+                const depthFactor = 1 - (i / rows);
+                
+                emoji.style.position = 'absolute';
+                emoji.style.left = `${x}%`;
+                emoji.style.top = `${y}%`;
+                emoji.style.fontSize = `${30 + Math.sin(x/30) * 10}px`; // Increased base size from 20 to 30
+                emoji.style.opacity = '0';
+                
+                const delay = (i + j) * 100;
+                emoji.style.animation = `
+                waveFloat ${2 + Math.random()}s ease-in-out infinite,
+                colorPulse ${10 + Math.random() * 5}s linear infinite
+                `;
+                emoji.style.animationDelay = `${delay}ms`;
+                
+                container.appendChild(emoji);
+                
+                setTimeout(() => {
+                emoji.style.opacity = 0.7 * depthFactor;
+                }, delay);
+            }
+            }
+            
+            function animate() {
+                time += 0.05;
+                const emojis = container.getElementsByClassName('emoji');
+                
+                Array.from(emojis).forEach((emoji, index) => {
+                    const row = Math.floor(index / cols);
+                    const depthFactor = 1 - (row / rows);
+                    const x = (index % cols) / cols * 100;
+                    
+                    const wave1 = Math.sin(x * baseFrequency + time) * baseAmplitude * depthFactor;
+                    const wave2 = Math.sin(x * baseFrequency * 2 + time * 0.5) * (baseAmplitude * 0.5) * depthFactor;
+                    const wave3 = Math.cos((row / rows) * baseFrequency + time * 0.3) * (baseAmplitude * 0.3) * depthFactor;
+                    
+                    emoji.style.transform = `
+                    translateY(${wave1 + wave2 + wave3}px)
+                    rotate(${Math.sin(x/30 + time) * 10 * depthFactor}deg)
+                    `;
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function createHeartPattern(container) {
+            // Reset container styles
+            container.style = '';
+            container.style.position = 'relative';
+            container.style.width = '100%';
+            container.style.height = '100vh';
+
+            // Create multiple layers for depth effect
+            const layers = 3;
+            const emojisPerLayer = 40;
+            
+            for (let layer = 0; layer < layers; layer++) {
+                const baseSize = 20 + (layer * 5); // Larger emojis in front
+                const baseOpacity = 0.8 - (layer * 0.2); // More transparent in back
+                
+                for (let i = 0; i < emojisPerLayer; i++) {
+                    // Parametric equations for heart shape
+                    const t = (i / emojisPerLayer) * 2 * Math.PI;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                    
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // Convert coordinates to percentage and center
+                    const centerX = 50 + (x * 2);
+                    const centerY = 50 - (y * 2);
+                    
+                    // Add random subtle variation
+                    const randomOffset = (Math.random() - 0.5) * 2;
+                    
+                    emoji.style.position = 'absolute';
+                    emoji.style.left = `${centerX + randomOffset}%`;
+                    emoji.style.top = `${centerY + randomOffset}%`;
+                    emoji.style.fontSize = `${baseSize + Math.random() * 5}px`;
+                    emoji.style.opacity = '0';
+                    emoji.style.zIndex = layer;
+                    
+                    // Add CSS animations
+                    emoji.style.transition = 'all 0.5s ease-out';
+                    emoji.style.animation = `
+                        pulsate ${2 + Math.random()}s ease-in-out infinite,
+                        float ${3 + Math.random()}s ease-in-out infinite
+                    `;
+                    emoji.style.animationDelay = `${i * 0.1}s`;
+                    
+                    container.appendChild(emoji);
+                    
+                    // Fade in with delay
+                    setTimeout(() => {
+                        emoji.style.opacity = baseOpacity;
+                    }, (layer * 200) + (i * 50));
+                }
+            }
+            
+            // Add CSS keyframes if not already present
+            if (!document.getElementById('heartAnimations')) {
+                const style = document.createElement('style');
+                style.id = 'heartAnimations';
+                style.textContent = `
+                    @keyframes pulsate {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                        100% { transform: scale(1); }
+                    }
+                    @keyframes float {
+                        0% { transform: translateY(0px); }
+                        50% { transform: translateY(-10px); }
+                        100% { transform: translateY(0px); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function createSpiralPattern(container) {
+            const points = 40;  // Increased points
+            const loops = 3;    // Number of spiral loops
+            const centerX = 50;
+            const centerY = 50;
+            
+            for (let i = 0; i < points; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'emoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                const angle = (i / points) * Math.PI * 2 * loops;
+                const radius = (i / points) * 45; // Max radius 45% of container
+                
+                emoji.style.position = 'absolute';
+                emoji.style.left = `${centerX + radius * Math.cos(angle)}%`;
+                emoji.style.top = `${centerY + radius * Math.sin(angle)}%`;
+                emoji.style.transform = `rotate(${angle * 57.2958}deg)`; // Convert radians to degrees
+                emoji.style.opacity = 0;
+                
+                container.appendChild(emoji);
+                setTimeout(() => emoji.style.opacity = '0.6', i * 50);
+            }
+        }
+
+        function createDiamondPattern(container) {
+            const size = 7;
+            const middle = Math.floor(size/2);
+            
+            container.style.display = 'Grid';
+            container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+            
+            for (let i = 0; i < size; i++) {
+                const emojisInRow = size - 2 * Math.abs(i - middle);
+                const offset = Math.abs(i - middle);
+                for (let j = 0; j < emojisInRow; j++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.gridColumn = `${j + offset + 1}`;
+                    emoji.style.gridRow = `${i + 1}`;
+                    emoji.style.opacity = 0;
+                    container.appendChild(emoji);
+                    setTimeout(() => emoji.style.opacity = '0.6', (i + j) * 50);
+                }
+            }
+        }
+
+        function createZigzagPattern(container) {
+            const rows = 10;
+            const cols = 10;
+            const amplitude = 20; // Controls the zigzag width
+            
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.gridColumn = `${j + 1}`;
+                    emoji.style.gridRow = `${i + 1}`;
+                    
+                    // Create zigzag effect
+                    const offset = Math.sin((i / rows) * Math.PI * 4) * amplitude;
+                    emoji.style.transform = `translateX(${offset}px)`;
+                    emoji.style.opacity = 0;
+                    
+                    container.appendChild(emoji);
+                    setTimeout(() => emoji.style.opacity = '0.6', (i + j) * 50);
+                }
+            }
+        }
+
+        // Enhanced joke functionality
+        function addClickAnimation() {
+            const elements = [
+                document.querySelector('.container'),
+                document.querySelector('.joke-container'),
+                document.querySelector('button')
+            ];
+            
+            elements.forEach(el => {
+                el.classList.add('click-animate');
+                setTimeout(() => el.classList.remove('click-animate'), 800);  // Increased from 400 to 800
+            });
+        }
+
+        // Add timer variables and duration constant
+        let patternTimer;
+        let jokeTimer;
+        const TIMER_DURATION = 8000; // 8 seconds
+        let lastClickTime = Date.now();
+
+        // Fix the joke function to be globally accessible
+        window.getRandomJoke = function() {
+            // Reset timers and update last click time
+            clearInterval(patternTimer);
+            clearInterval(jokeTimer);
+            lastClickTime = Date.now();
+            
+            addClickAnimation();
+            const jokeElement = document.getElementById('joke');
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Force pattern change
+            let newPattern;
+            do {
+                newPattern = getRandomPattern();
+            } while (newPattern === document.getElementById('emojiPattern').className.split('pattern-')[1]);
+            createPatternElements(newPattern);
+            
+            jokeElement.style.opacity = 0;
+            setTimeout(() => {
+                jokeElement.textContent = `${randomJoke} ${randomEmoji}`;
+                jokeElement.style.opacity = 1;
+            }, 600);
+
+            // Start fresh timers
+            startTimers();
+        }
+
+        // Update timer management function
+        function startTimers() {
+            // Clear existing timers
+            clearInterval(patternTimer);
+            clearInterval(jokeTimer);
+            
+            // Start new timers with full duration
+            patternTimer = setInterval(() => {
+                let newPattern;
+                do {
+                    newPattern = getRandomPattern();
+                } while (newPattern === document.getElementById('emojiPattern').className.split('pattern-')[1]);
+                createPatternElements(newPattern);
+            }, TIMER_DURATION);
+
+            jokeTimer = setInterval(getRandomJoke, TIMER_DURATION);
+        }
+
+        // Update initialize function
+        function initialize() {
+            // Set initial random pattern immediately with requestAnimationFrame
+            requestAnimationFrame(() => {
+                const initialPattern = getRandomPattern();
+                createPatternElements(initialPattern);
+            });
+            
+            // Get initial joke
+            getRandomJoke();
+            
+            // Start the timers
+            startTimers();
+        }
+
+        // Load initial content
+        window.onload = initialize;
+
+        // Update getRandomPattern to avoid case issues
+        function getRandomPattern() {
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            return pattern.toLowerCase(); // Ensure lowercase pattern names
+        }
+
+        // Add pattern tracking
+        let lastPatterns = [];
+        const MAX_HISTORY = 3; // Keep track of last 3 patterns to avoid quick repeats
+
+        // Update getRandomPattern function for better randomization
+        function getRandomPattern() {
+            let availablePatterns = patterns.filter(p => !lastPatterns.includes(p));
+            
+            // If all patterns were recently used, reset history but keep last used pattern
+            if (availablePatterns.length === 0) {
+                const lastPattern = lastPatterns[lastPatterns.length - 1];
+                lastPatterns = [lastPattern];
+                availablePatterns = patterns.filter(p => p !== lastPattern);
+            }
+            
+            // Get truly random pattern from available ones
+            const randomIndex = Math.floor(Math.random() * availablePatterns.length);
+            const selectedPattern = availablePatterns[randomIndex].toLowerCase();
+            
+            // Update pattern history
+            lastPatterns.push(selectedPattern);
+            if (lastPatterns.length > MAX_HISTORY) {
+                lastPatterns.shift();
+            }
+            
+            return selectedPattern;
+        }
+
+        // Update window.getRandomJoke to use new pattern selection
+        window.getRandomJoke = function() {
+            // Reset timers and update last click time
+            clearInterval(patternTimer);
+            clearInterval(jokeTimer);
+            lastClickTime = Date.now();
+            
+            addClickAnimation();
+            const jokeElement = document.getElementById('joke');
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Force pattern change with new random selection
+            let newPattern;
+            const currentPattern = document.getElementById('emojiPattern').className.split('pattern-')[1];
+            do {
+                newPattern = getRandomPattern();
+            } while (newPattern === currentPattern);
+            
+            createPatternElements(newPattern);
+            
+            jokeElement.style.opacity = 0;
+            setTimeout(() => {
+                jokeElement.textContent = `${randomJoke} ${randomEmoji}`;
+                jokeElement.style.opacity = 1;
+            }, 600);
+
+            // Start fresh timers
+            startTimers();
+        }
+
+    </script>
+</body>
+</html>
