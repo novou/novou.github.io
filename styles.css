@@ -227,10 +227,7 @@ button {
     user-select: none;
 }
 
-.force-redraw {
-    transform: translateZ(0);
-}
-
+/* iOS specific button states */
 button:hover,
 button:focus,
 button:active {

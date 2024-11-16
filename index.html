@@ -503,18 +503,11 @@
             const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
             const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
             
-            // Force button redraw
-            const button = document.querySelector('button');
-            button.classList.add('force-redraw');
-            setTimeout(() => button.classList.remove('force-redraw'), 50);
-            
-            // Force pattern change with new random selection
+            // Force pattern change
             let newPattern;
-            const currentPattern = document.getElementById('emojiPattern').className.split('pattern-')[1];
             do {
                 newPattern = getRandomPattern();
-            } while (newPattern === currentPattern);
-            
+            } while (newPattern === document.getElementById('emojiPattern').className.split('pattern-')[1]);
             createPatternElements(newPattern);
             
             jokeElement.style.opacity = 0;
