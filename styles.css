@@ -43,7 +43,7 @@ body {
     max-width: 800px;
     border-radius: 20px;
     position: relative;
-    background: rgba(255, 255, 255, 0.01); /* Very subtle white background */
+    background: rgba(255, 255, 255, 0) !important; /* Force complete transparency */
     -webkit-backdrop-filter: blur(8px); /* Safari support */
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -196,10 +196,10 @@ body {
 }
 
 button {
-    background: rgba(255, 255, 255, 0.05) !important; /* Force subtle background for Safari */
+    background: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1.2rem 2.5rem;
-    color: white;
+    color: white !important;
     border-radius: 25px;
     cursor: pointer;
     font-size: 1.4rem; 
@@ -255,6 +255,32 @@ button:hover {
         background: rgba(255, 255, 255, 0.05) !important;
         -webkit-backdrop-filter: blur(4px) saturate(180%);
         backdrop-filter: blur(4px) saturate(180%);
+    }
+    .container, button {
+        background: transparent !important;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+    }
+    
+    button {
+        background: none !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    button:focus {
+        background: transparent !important;
+    }
+    
+    /* Remove any default iOS button styles */
+    button, 
+    button:hover, 
+    button:active, 
+    button:focus {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        background: transparent !important;
+        background-image: none !important;
     }
 }
 
